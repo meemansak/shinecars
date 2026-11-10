@@ -580,7 +580,7 @@
         var m = marks[i];
         m.life -= m.decay;
         if (m.life <= 0) { marks.splice(i, 1); continue; }
-        ctx.globalAlpha = m.life * 0.42; /* 2026-11-10: halved from 0.85 — user said the marks were a little too much */
+        ctx.globalAlpha = m.life * 0.21; /* 2026-11-10: halved again from 0.42 — user asked to reduce the trail by another 50% */
         /* Warm mid-grey: with 'difference' it darkens light
            backgrounds and lightens dark ones — one style, both. */
         ctx.fillStyle = '#8f8578';

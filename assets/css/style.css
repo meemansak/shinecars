@@ -106,7 +106,7 @@
   .hero h1 .out{color:transparent;-webkit-text-stroke:2px var(--orange2)}
   .hero h1 .org{color:var(--orange2)}
   .hero p.lede{font-size:1.08rem;color:#dbe7ec;max-width:34rem;margin:0 0 26px}
-  .hero-phone{display:flex;align-items:center;gap:12px;font-family:var(--font-d);font-weight:400;letter-spacing:.05em;font-size:clamp(1.5rem,3.4vw,2.2rem);color:var(--orange2);text-decoration:none;width:fit-content;min-height:48px}
+  .hero-phone{display:flex;align-items:center;gap:12px;font-family:var(--font-b);font-weight:600;letter-spacing:.06em;font-size:clamp(1.25rem,2.6vw,1.7rem);color:#fff;background:rgba(7,20,27,.62);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:10px 20px 10px 10px;text-decoration:none;width:fit-content;min-height:48px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
   .hero-phone .ic{width:44px;height:44px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:1.05rem;flex:none}
   .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 34px}
   .hero-card{perspective:1100px;padding-bottom:6px}
@@ -465,7 +465,12 @@ html.lenis, html.lenis body { height: auto; }
    outlined "DELHI–NCR" letters (.out) keep their transparent fill
    + orange stroke and only gain a soft glow, never a fill. The
    jelly wobble is a small translate + scaleY on the lit letter,
-   with a GSAP elastic pass when available. */
+   with a GSAP elastic pass when available.
+   Word integrity (2026-11-10): letters live inside .word spans
+   (inline-block, white-space:nowrap), so a word wraps only as a
+   whole — resizing the window can never split a word's letters
+   across two lines. */
+.word { display: inline-block; white-space: nowrap; }
 .ltr { display: inline-block; will-change: transform, color, text-shadow;
   transition: color .5s ease, text-shadow .5s ease, transform .5s cubic-bezier(.34, 1.56, .64, 1); }
 .ltr.lit { color: #ff7a29;

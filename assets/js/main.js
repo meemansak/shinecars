@@ -637,16 +637,28 @@
       var nodes = Array.prototype.slice.call(el.childNodes);
       nodes.forEach(function (node) {
         if (node.nodeType === 3) {
+          /* Split into WORDS first, then letters inside each word:
+             every word lives in a .word span (white-space:nowrap),
+             so a word can only wrap as a whole — its letters can
+             never split across lines on resize. Spaces stay as
+             bare text nodes between words, which is where wrapping
+             is allowed to happen. */
           var frag = document.createDocumentFragment();
-          node.textContent.split('').forEach(function (ch) {
-            if (ch === ' ' || ch === '\n' || ch === '\t') {
-              frag.appendChild(document.createTextNode(ch));
-            } else {
+          node.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              frag.appendChild(document.createTextNode(part));
+              return;
+            }
+            var w = document.createElement('span');
+            w.className = 'word';
+            part.split('').forEach(function (ch) {
               var sp = document.createElement('span');
               sp.className = 'ltr' + (extraCls ? ' ' + extraCls : '');
               sp.textContent = ch;
-              frag.appendChild(sp);
-            }
+              w.appendChild(sp);
+            });
+            frag.appendChild(w);
           });
           el.replaceChild(frag, node);
         } else if (node.nodeType === 1) {

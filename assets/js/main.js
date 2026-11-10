@@ -19,6 +19,7 @@
     11. Active nav / scrollspy + smooth anchor scrolling (Lenis)
     12. Magnetic premium buttons
     13. Motion bootstrap: Lenis + GSAP, with graceful fallbacks
+    14. Cursor trail + hero/logo glow (canvas 2D; word reveal lives in §3)
 
    Libraries (local files, loaded before this file in index.html):
      - GSAP 3.13.0            assets/js/vendor/gsap.min.js
@@ -295,6 +296,18 @@
           scrollTrigger: { trigger: el, start: 'top 88%', once: true }
         });
       });
+      /* Word-by-word headline reveal (borrowed from the Wedditors
+         reference .note-word): each word lifts from opacity .22 /
+         y 22px, staggered — a one-time entrance, not scrubbed, so
+         it never fights the short pin. Without GSAP the words
+         simply render normally; CSS never hides them. */
+      var headWords = document.querySelectorAll('.word-reveal .w-word');
+      if (headWords.length) {
+        window.gsap.from(headWords, {
+          y: 22, opacity: 0.22, duration: 0.7, ease: 'power3.out', stagger: 0.07,
+          scrollTrigger: { trigger: '.pin-head', start: 'top 85%', once: true }
+        });
+      }
       /* Fail-safe: anything still transparent in the viewport after
          4s (e.g. a missed trigger) is shown immediately. */
       setTimeout(function () {
@@ -402,6 +415,25 @@
     var track = $('pinTrack');
     var bar = $('pinProgress');
     if (pinWrap && track && bar) {
+      /* FIX (2026-11-10): pin distance is computed from the real
+         horizontal travel instead of a fixed 340vh. 100vh to show
+         the section + ~0.9x the travel distance, clamped to
+         150-210vh, so the sideways journey finishes quickly and
+         the page releases into the next section right away.
+         The no-GSAP fallback below derives its progress from
+         pinWrap.offsetHeight, so it follows this height too. */
+      var pinSetHeight = function () {
+        if (window.innerWidth <= 860 || reduceMotion) { pinWrap.style.height = ''; return; }
+        var travel = Math.max(track.scrollWidth - track.parentElement.clientWidth + 40, 0);
+        var h = Math.round(window.innerHeight + travel * 0.9);
+        h = Math.max(Math.min(h, window.innerHeight * 2.1), window.innerHeight * 1.5);
+        pinWrap.style.height = h + 'px';
+      };
+      pinSetHeight();
+      on(window, 'resize', function () {
+        pinSetHeight();
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      });
       if (hasGsap && !reduceMotion) {
         window.gsap.matchMedia().add('(min-width: 861px)', function () {
           window.gsap.to(track, {
@@ -411,13 +443,14 @@
             ease: 'none',
             scrollTrigger: {
               trigger: pinWrap, start: 'top top', end: 'bottom bottom',
-              scrub: 0.6, invalidateOnRefresh: true,
+              scrub: 0.3, invalidateOnRefresh: true,
               onUpdate: function (self) { bar.style.width = (self.progress * 100) + '%'; }
             }
           });
           return function () {
             window.gsap.set(track, { x: 0 });
             bar.style.width = '0%';
+            pinWrap.style.height = '';
           };
         });
       } else {
@@ -474,6 +507,131 @@
       target.focus({ preventScroll: true });
     });
   });
+
+  /* ------------------------------------------------------------------ */
+  /* 14. Cursor trail + hero/logo glow (Fix 2 & 3, 2026-11-10)           */
+  /*     Canvas 2D only — no Three.js, no new dependency. Runs only    */
+  /*     on hover-capable devices and never with reduced motion.        */
+  /*     The rAF loop sleeps when idle (no particles + no mouse        */
+  /*     movement for 2s) and restarts on the next mousemove.           */
+  /* ------------------------------------------------------------------ */
+  var trail = (function () {
+    if (!canHover || reduceMotion) return null;
+    var canvas = $('trailCanvas');
+    if (!canvas) return null;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var parts = [], rafId = 0, running = false;
+    var lastSpawn = 0, lastMove = 0;
+    var COLORS = ['#ff7a29', '#f45d12', '#c98a2d', '#ffd9a8'];
+    function resize() {
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    on(window, 'resize', resize);
+    /* One glowing water droplet: drifts, shrinks and fades. */
+    function spawn(x, y, big) {
+      if (parts.length > 140) parts.splice(0, parts.length - 140);
+      parts.push({
+        x: x + (Math.random() - 0.5) * 8,
+        y: y + (Math.random() - 0.5) * 8,
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7 - 0.25,
+        r: big ? 3 + Math.random() * 5 : 1.6 + Math.random() * 3.2,
+        life: 1,
+        decay: 0.022 + Math.random() * 0.02,
+        c: COLORS[(Math.random() * COLORS.length) | 0]
+      });
+    }
+    function tick(now) {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      ctx.globalCompositeOperation = 'lighter';
+      for (var i = parts.length - 1; i >= 0; i--) {
+        var p = parts[i];
+        p.x += p.vx; p.y += p.vy; p.vy += 0.012; p.life -= p.decay;
+        if (p.life <= 0) { parts.splice(i, 1); continue; }
+        var r = Math.max(p.r * p.life, 0.4);
+        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 3);
+        g.addColorStop(0, p.c);
+        g.addColorStop(1, 'rgba(255,122,41,0)');
+        ctx.globalAlpha = p.life * 0.85;
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r * 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = '#fff8ef';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r * 0.45, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+      if (parts.length === 0 && now - lastMove > 2000) {
+        running = false; rafId = 0; return; /* sleep until next move */
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+    function wake() {
+      if (running) return;
+      running = true;
+      rafId = requestAnimationFrame(tick);
+    }
+    on(document, 'mousemove', function (e) {
+      var now = performance.now();
+      if (now - lastSpawn < 14) return; /* throttle: ~70 spawns/sec max */
+      lastSpawn = now; lastMove = now;
+      spawn(e.clientX, e.clientY, false);
+      spawn(e.clientX, e.clientY, false);
+      wake();
+    }, { passive: true });
+    return {
+      burst: function (x, y, n) {
+        for (var i = 0; i < n; i++) spawn(x, y, true);
+        lastMove = performance.now();
+        wake();
+      }
+    };
+  })();
+
+  /* Hero h1 + header logo glow: colour cycles orange -> gold -> warm
+     white (CSS .glow-on), a soft jelly wobble (GSAP elastic when
+     available, .glow-jelly CSS fallback when not), and water droplets
+     rippling off the cursor while it moves over the text. The hero's
+     outlined "DELHI–NCR" span is untouched — the colour animation
+     only applies to the plain text. */
+  if (canHover && !reduceMotion) {
+    var glowTargets = document.querySelectorAll('.hero h1, .logo');
+    glowTargets.forEach(function (el) {
+      var lastBurst = 0;
+      el.addEventListener('mouseenter', function () {
+        el.classList.add('glow-on');
+        if (window.gsap) {
+          window.gsap.killTweensOf(el);
+          window.gsap.to(el, { scale: 1.025, duration: 0.7, ease: 'elastic.out(1,0.4)' });
+        } else {
+          el.classList.add('glow-jelly');
+        }
+      });
+      el.addEventListener('mousemove', function (e) {
+        var now = performance.now();
+        if (trail && now - lastBurst > 40) {
+          lastBurst = now;
+          trail.burst(e.clientX, e.clientY, 2);
+        }
+      });
+      el.addEventListener('mouseleave', function () {
+        el.classList.remove('glow-on', 'glow-jelly');
+        if (window.gsap) {
+          window.gsap.killTweensOf(el);
+          window.gsap.to(el, { scale: 1, duration: 0.5, ease: 'power3.out' });
+        }
+      });
+    });
+  }
 
   /* ---- Boot: try the local vendor files first (already in the page);
      if any failed, try the CDN once, then run with what's available. -- */

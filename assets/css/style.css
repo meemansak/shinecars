@@ -175,8 +175,15 @@
   @media(max-width:900px){.svc{grid-template-columns:1fr}.svc .num{font-size:1.8rem}.svc .svc-img img{height:210px}}
 
   /* process — pinned horizontal */
+  /* FIX (2026-11-10): was height:340vh — ~240vh of scroll just to sit
+     on this section, which felt stuck and left a huge gap after the
+     pin released. The baseline is now 190vh; main.js section 7 then
+     sets the exact height from the real horizontal travel
+     (100vh + travel x ~0.9, clamped 150-210vh), so the travel
+     finishes quickly and the page releases straight into the next
+     section. Mobile (<=860px) is untouched: height:auto, no pin. */
   .process{background:var(--paper2)}
-  .pin-wrap{height:340vh;position:relative}
+  .pin-wrap{height:190vh;position:relative}
   .pin-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
   .pin-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px;flex-wrap:wrap}
   .pin-head h2{font-size:clamp(2rem,4.4vw,3rem);font-weight:700;color:var(--ink)}
@@ -425,4 +432,61 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .btn::after { display: none; }
   .btn { will-change: auto; }
+}
+
+/* ---------- Cursor trail + hero/logo glow (Fix 2 & 3, 2026-11-10) ----
+   Canvas 2D only — no Three.js, no new dependency. The canvas is a
+   fixed overlay with pointer-events:none, so it can never block a
+   click; the trail is drawn by main.js section 14 and only runs on
+   hover-capable devices. z-index 90 sits above the sticky nav (60)
+   and the WhatsApp float (70) but there is no modal on this page. */
+#trailCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; }
+@media (hover: none) { #trailCanvas { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  #trailCanvas { display: none; }
+  .hero h1.glow-on, .logo.glow-on .l1 { animation: none; }
+}
+
+/* Hero h1 + header logo: on hover the text glows and its colour
+   cycles orange -> gold -> warm white; the jelly wobble is a soft
+   elastic scale — GSAP when available (main.js), .glow-jelly CSS
+   fallback when not. The hero's outlined "DELHI–NCR" span keeps
+   its own transparent fill + stroke: the colour animation only
+   touches the plain text, never .out. */
+.hero h1, .logo { will-change: transform; }
+.hero h1.glow-on { animation: glowCycle 2.4s linear infinite; }
+.hero h1.glow-on { text-shadow: 0 0 18px rgba(255, 122, 41, .75), 0 0 46px rgba(201, 138, 45, .5); }
+.logo.glow-on { text-shadow: 0 0 16px rgba(255, 122, 41, .45); }
+/* Logo sits on a light nav bar, so its cycle ends on ink, not white. */
+.logo.glow-on .l1 { animation: glowCycleLogo 2.4s linear infinite; }
+.hero h1.glow-jelly, .logo.glow-jelly { transform: scale(1.02); transition: transform .45s cubic-bezier(.34, 1.56, .64, 1); }
+@keyframes glowCycle {
+  0% { color: #ff7a29; }
+  33% { color: #c98a2d; }
+  66% { color: #fff; }
+  100% { color: #ff7a29; }
+}
+@keyframes glowCycleLogo {
+  0% { color: #ff7a29; }
+  33% { color: #c98a2d; }
+  66% { color: #0b1c24; }
+  100% { color: #ff7a29; }
+}
+
+/* ---------- Word-by-word headline reveal + scroll cue ----------
+   Idea borrowed from the Wedditors reference (.note-word): words
+   lift in one by one from low opacity; the accent phrase is italic
+   Cormorant in brand orange (ShineCars' own fonts/colours, not the
+   reference's green/cream or its copy). Words are never hidden by
+   CSS — GSAP animates *from* the dim state only when it runs. */
+.pin-head h2 .w-word { display: inline-block; will-change: transform, opacity; }
+.pin-head h2 em { font-style: italic; color: var(--orange); }
+.scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 auto; padding: 26px 0 6px; font-family: var(--font-eyebrow); font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 600; color: var(--orange); text-align: center; }
+.scroll-cue i { font-style: normal; font-size: 1.25rem; line-height: 1; animation: cueDrop 1.6s ease-in-out infinite; }
+@keyframes cueDrop {
+  0%, 100% { transform: translateY(0); opacity: .55; }
+  50% { transform: translateY(7px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue i { animation: none; }
 }

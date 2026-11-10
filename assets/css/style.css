@@ -364,6 +364,19 @@ html.lenis, html.lenis body { height: auto; }
 .cafe-facts a { color: #ffb37e; text-decoration: none; font-weight: 700; }
 .cafe-facts a:hover { text-decoration: underline; }
 
+/* ---------- Cafe visitor quote + draft menu ---------- */
+.cafe-quote { margin: 28px 0; padding: 20px 22px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-left: 3px solid var(--gold, #c98a2d); border-radius: 14px; }
+.cafe-quote .mono { color: #ffb37e; }
+.cafe-quote p { font-family: var(--font-d); font-size: 1.25rem; line-height: 1.5; color: #fdf3e7; margin: 10px 0 12px; }
+.cafe-quote footer { font-size: .85rem; color: #d9c3ab; }
+.cafe-quote footer a { color: #ffb37e; text-decoration: none; font-weight: 700; }
+.cafe-quote footer a:hover { text-decoration: underline; }
+.cafe-menu { margin: 0 0 28px; padding: 20px 22px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-radius: 14px; }
+.cafe-menu h3 { font-family: var(--font-d); font-size: 1.4rem; color: #fdf3e7; margin: 0 0 6px; }
+.cafe-menu-note { font-size: .82rem; color: #d9c3ab; margin: 0 0 12px; }
+.cafe-menu ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.cafe-menu li { padding: 8px 14px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: .9rem; font-weight: 600; color: #fdf3e7; }
+
 /* ---------- Luxury headings ----------
    Playfair Display for section + service + step titles (Cormorant
    stays on the hero, About and cafe headlines); gold eyebrows on

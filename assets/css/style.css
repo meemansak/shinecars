@@ -322,10 +322,23 @@
   .copy{border-top:1px solid rgba(255,255,255,.12);padding:18px 0 22px;font-size:.84rem;color:var(--muted-d);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .wa-float{position:fixed;right:18px;bottom:18px;z-index:70;background:#1faa55;color:#fff;text-decoration:none;font-weight:600;letter-spacing:.08em;font-size:.9rem;padding:14px 20px;border-radius:999px;box-shadow:0 14px 34px rgba(10,40,20,.35);display:inline-flex;gap:8px;align-items:center;min-height:52px}
   .wa-float:hover{background:#178a44}
+  .wa-float svg.ic-wa{width:20px;height:20px;flex:none}
+  /* WhatsApp brand glyph (inline SVG, Font Awesome Free) */
+  svg.ic-wa{fill:currentColor;flex:none}
+  .btn svg.ic-wa{width:18px;height:18px}
+  .info-row .ic-wa{background:rgba(31,170,85,.18);color:#1faa55}
+  .info-row .ic-wa svg.ic-wa{width:20px;height:20px}
+  /* ---------- Back to top (above the WhatsApp float) ------------ */
+  .to-top{position:fixed;right:18px;bottom:84px;z-index:70;width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;border:1px solid rgba(201,138,45,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 28px rgba(0,0,0,.3);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .3s ease,transform .3s ease,visibility .3s}
+  .to-top.show{opacity:1;visibility:visible;transform:none}
+  .to-top:hover{background:var(--orange);border-color:var(--orange)}
+  .to-top svg{width:22px;height:22px}
   @media(max-width:640px){
     .topbar .tb-right span{display:none}
     .wa-float{width:54px;height:54px;min-height:54px;padding:0;border-radius:50%;justify-content:center;font-size:1.3rem;right:14px;bottom:14px}
     .wa-float .wa-txt{display:none}
+    .wa-float svg.ic-wa{width:26px;height:26px}
+    .to-top{right:14px;bottom:80px;width:48px;height:48px}
   }
   @media(max-width:900px){.foot-grid{grid-template-columns:1fr}}
   @media (prefers-reduced-motion: reduce){

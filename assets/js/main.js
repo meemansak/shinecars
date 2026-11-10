@@ -508,6 +508,24 @@
     });
   });
 
+  /* ------------------------------------------------------------------ */
+  /* 11c. Back-to-top button: appears after scrolling down, smooth     */
+  /*     scrolls to the top via Lenis when present.                     */
+  /* ------------------------------------------------------------------ */
+  var toTop = $('toTop');
+  if (toTop) {
+    var SHOW_AFTER = 600;
+    function updateToTop() {
+      toTop.classList.toggle('show', window.scrollY > SHOW_AFTER);
+    }
+    on(window, 'scroll', updateToTop, { passive: true });
+    updateToTop();
+    toTop.addEventListener('click', function () {
+      if (lenis) lenis.scrollTo(0, { duration: reduceMotion ? 0 : 1.2 });
+      else window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
     /* ------------------------------------------------------------------ */
   /* 14. Tyre-track cursor trail + per-letter glow (rework 2026-11-10)  */
   /*     The old glowing water droplets read as FIRE, so they are gone  */

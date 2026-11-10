@@ -201,10 +201,17 @@
   .progress i{display:block;height:100%;width:0;background:var(--orange);border-radius:99px}
   @media(max-width:860px){
     .pin-wrap{height:auto}
-    .pin-sticky{position:static;height:auto;padding:0}
+    .pin-sticky{position:static;height:auto;padding:0;overflow:visible}
     .pin-track{flex-direction:column;padding-right:0;transform:none!important}
     .step{flex:none;min-height:0}
     .progress{display:none}
+  }
+
+  /* ---------- Mobile: full-width hero CTAs (thumb-friendly) ------ */
+  @media(max-width:600px){
+    .hero-ctas{flex-direction:column}
+    .hero-ctas .btn{width:100%;box-sizing:border-box;justify-content:center;text-align:center}
+    .hero-phone{font-size:1.15rem}
   }
 
   /* shine slider */
@@ -348,7 +355,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- Utility classes (replace former inline styles) ---------- */
 .hero--flush { padding: 0; }
 .stats-wrap--flush { padding: 0; }
-.wrap--full { width: 100%; }
+.wrap--full { width: 100%; box-sizing: border-box; /* without border-box, width:100% + the .wrap side padding made this 44px too wide, clipping the process cards on mobile */ }
 .text-orange { color: var(--orange); }
 .text-orange2 { color: var(--orange2); }
 .text-muted { color: var(--muted); }

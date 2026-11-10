@@ -167,13 +167,15 @@
   .svc{display:grid;grid-template-columns:110px 1fr 340px;gap:26px;align-items:center;background:var(--ink2);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:22px;transition:border-color .2s ease,background .2s ease}
   .svc:hover{border-color:rgba(255,122,41,.55);background:var(--ink3)}
   .svc .num{font-family:var(--font-d);font-weight:400;font-size:2.8rem;letter-spacing:.04em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.4)}
-  .svc h3{font-size:1.5rem;font-weight:400;letter-spacing:.06em;margin-bottom:7px}
+  .svc h3{font-size:1.5rem;font-weight:400;letter-spacing:.06em;margin-bottom:7px;color:#fff}
   .svc p{margin:0;color:var(--muted-d);font-size:.95rem;max-width:34rem}
   .svc .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
   .svc .tags span{font-family:var(--font-eyebrow);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,255,255,.22);padding:6px 10px;border-radius:999px;color:#dbe7ec}
   .svc .svc-img{border-radius:14px;overflow:hidden;perspective:800px}
   .svc .svc-img img{width:100%;height:190px;object-fit:cover}
   .svc .book-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:var(--orange2);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;text-decoration:none;min-height:36px}
+  /* Home & office cards: text-led, no photo column (no home photos on file) */
+  .svc--noimg{grid-template-columns:110px 1fr}
   @media(max-width:900px){.svc{grid-template-columns:1fr}.svc .num{font-size:1.8rem}.svc .svc-img img{height:210px}}
 
   /* process — pinned horizontal */

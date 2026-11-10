@@ -527,20 +527,16 @@
   }
 
     /* ------------------------------------------------------------------ */
-  /* 14. Tyre-track cursor trail + per-letter glow (rework 2026-11-10)  */
-  /*     The old glowing water droplets read as FIRE, so they are gone  */
-  /*     entirely. The trail is now fading tyre tread: as the cursor   */
-  /*     moves it stamps small dark tread blocks in two parallel       */
-  /*     lines, each rotated to the direction of travel — like a wheel  */
-  /*     rolling past and leaving skid marks on the road. Warm-grey    */
-  /*     tread + mix-blend-mode:difference (see #trailCanvas in        */
-  /*     style.css) reads on light sections (it darkens) and on the    */
-  /*     dark hero (it lightens). No glow, no bright orange, no fire.  */
+  /* 14. Fine gold thread cursor trail + per-letter glow (2026-11-11)  */
+  /*     The tyre-tread trail read as cringe, so it is gone entirely. */
+  /*     The new trail is premium-minimal: a hairline gold thread    */
+  /*     (1px) with tiny fading dots, trailing just behind the        */
+  /*     cursor — thin, small and light, never a mark on the page.    */
   /*     Canvas 2D only, no new dependency. Hover devices only, never  */
   /*     with reduced motion; the rAF loop sleeps when idle.           */
   /* ------------------------------------------------------------------ */
 
-  /* ---- 14a. Tyre tread trail -------------------------------------- */
+  /* ---- 14a. Fine gold thread trail -------------------------------- */
   var trail = (function () {
     if (!canHover || reduceMotion) return null;
     var canvas = $('trailCanvas');
@@ -548,8 +544,12 @@
     var ctx = canvas.getContext('2d');
     if (!ctx) return null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var marks = [], rafId = 0, running = false, lastMove = 0;
+    var points = [], rafId = 0, running = false, lastMove = 0;
     var lastX = null, lastY = null, acc = 0;
+    var MAX_POINTS = 22;      /* short tail — fades in under a second */
+    var STEP = 10;            /* one dot every ~10px of travel */
+    var MAX_ALPHA = 0.30;     /* barely there; gold, never loud */
+    var GOLD = '201,138,45';  /* --gold #c98a2d */
     function resize() {
       canvas.width = Math.round(window.innerWidth * dpr);
       canvas.height = Math.round(window.innerHeight * dpr);
@@ -557,56 +557,34 @@
     }
     resize();
     on(window, 'resize', resize);
-    /* One tread stamp: two blocks, one per wheel line, offset
-       perpendicular to the direction of travel. */
-    function stamp(x, y, angle, speed) {
-      if (marks.length > 120) marks.splice(0, marks.length - 120);
-      var len = 9 + Math.min(speed * 0.12, 6); /* faster = longer skid */
-      var px = Math.cos(angle + Math.PI / 2), py = Math.sin(angle + Math.PI / 2);
-      [-7, 7].forEach(function (off) {
-        marks.push({
-          x: x + px * off, y: y + py * off,
-          a: angle + (Math.random() - 0.5) * 0.08,
-          len: len, w: 4.5, life: 1,
-          decay: 0.009 + Math.random() * 0.004 /* ~1.5-2s fade */
-        });
-      });
-    }
-    function drawMark(m) {
-      ctx.save();
-      ctx.translate(m.x, m.y);
-      ctx.rotate(m.a);
-      var l = m.len / 2, w = m.w / 2;
-      ctx.beginPath();
-      ctx.moveTo(-l + 2, -w);
-      ctx.lineTo(l - 2, -w);
-      ctx.quadraticCurveTo(l, -w, l, -w + 2);
-      ctx.lineTo(l, w - 2);
-      ctx.quadraticCurveTo(l, w, l - 2, w);
-      ctx.lineTo(-l + 2, w);
-      ctx.quadraticCurveTo(-l, w, -l, w - 2);
-      ctx.lineTo(-l, -w + 2);
-      ctx.quadraticCurveTo(-l, -w, -l + 2, -w);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
+    function addPoint(x, y) {
+      if (points.length >= MAX_POINTS) points.shift();
+      points.push({ x: x, y: y, life: 1, decay: 0.028 + Math.random() * 0.008 });
     }
     function tick(now) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.globalCompositeOperation = 'difference';
-      for (var i = marks.length - 1; i >= 0; i--) {
-        var m = marks[i];
-        m.life -= m.decay;
-        if (m.life <= 0) { marks.splice(i, 1); continue; }
-        ctx.globalAlpha = m.life * 0.21; /* 2026-11-10: halved again from 0.42 — user asked to reduce the trail by another 50% */
-        /* Warm mid-grey: with 'difference' it darkens light
-           backgrounds and lightens dark ones — one style, both. */
-        ctx.fillStyle = '#8f8578';
-        drawMark(m);
+      /* Hairline thread through the points, oldest to newest. */
+      if (points.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (var i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+        ctx.strokeStyle = 'rgba(' + GOLD + ',0.14)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
       }
-      ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = 'source-over';
-      if (marks.length === 0 && now - lastMove > 2000) {
+      /* Tiny dots: newest 2.2px, fading to under 1px at the tail. */
+      for (var j = points.length - 1; j >= 0; j--) {
+        var p = points[j];
+        p.life -= p.decay;
+        if (p.life <= 0) { points.splice(j, 1); continue; }
+        var age = 1 - j / points.length; /* 0 = newest, 1 = oldest */
+        var r = 2.2 - age * 1.4;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(r, 0.6), 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + GOLD + ',' + (p.life * MAX_ALPHA).toFixed(3) + ')';
+        ctx.fill();
+      }
+      if (points.length === 0 && now - lastMove > 1500) {
         running = false; rafId = 0; return; /* sleep until next move */
       }
       rafId = requestAnimationFrame(tick);
@@ -622,14 +600,12 @@
       if (lastX === null) { lastX = e.clientX; lastY = e.clientY; return; }
       var dx = e.clientX - lastX, dy = e.clientY - lastY;
       var dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 4) return;
+      if (dist < 3) return;
       acc += dist;
-      var angle = Math.atan2(dy, dx);
-      /* Stamp every ~26px of travel so the tread stays evenly spaced. */
-      while (acc >= 26) {
-        acc -= 26;
+      while (acc >= STEP) {
+        acc -= STEP;
         var t = 1 - acc / dist;
-        stamp(lastX + dx * t, lastY + dy * t, angle, dist);
+        addPoint(lastX + dx * t, lastY + dy * t);
       }
       lastX = e.clientX; lastY = e.clientY;
       wake();

@@ -459,19 +459,16 @@ html.lenis, html.lenis body { height: auto; }
   .btn { will-change: auto; }
 }
 
-/* ---------- Cursor trail: fading tyre tread marks -------------------
-   Rework (2026-11-10): the old glowing water droplets read as FIRE,
-   so they are gone. The trail is now two parallel lines of small
-   dark tread blocks, each rotated to the cursor's direction of
-   travel — like a wheel rolling past and leaving skid marks on the
-   road. The canvas uses mix-blend-mode:difference with warm-grey
-   tread, so the same marks read on light sections (they darken)
-   and on the dark hero (they lighten). No glow, no bright orange,
-   no fire. Canvas 2D only, drawn by main.js section 14; fixed
-   overlay, pointer-events:none, so it can never block a click.
+/* ---------- Cursor trail: fine gold thread --------------------------
+   Rework (2026-11-11): the tyre-tread trail read as cringe, so it
+   is gone entirely. The trail is now a hairline gold thread (1px)
+   with tiny fading dots trailing just behind the cursor — thin,
+   small and light, never a mark on the page. Canvas 2D only,
+   drawn by main.js section 14; fixed overlay,
+   pointer-events:none, so it can never block a click.
    z-index 90 sits above the sticky nav (60) and the WhatsApp
    float (70); there is no modal on this page. */
-#trailCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; mix-blend-mode: difference; }
+#trailCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; }
 @media (hover: none) { #trailCanvas { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   #trailCanvas { display: none; }

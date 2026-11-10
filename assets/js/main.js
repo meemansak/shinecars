@@ -508,13 +508,21 @@
     });
   });
 
+    /* ------------------------------------------------------------------ */
+  /* 14. Tyre-track cursor trail + per-letter glow (rework 2026-11-10)  */
+  /*     The old glowing water droplets read as FIRE, so they are gone  */
+  /*     entirely. The trail is now fading tyre tread: as the cursor   */
+  /*     moves it stamps small dark tread blocks in two parallel       */
+  /*     lines, each rotated to the direction of travel — like a wheel  */
+  /*     rolling past and leaving skid marks on the road. Warm-grey    */
+  /*     tread + mix-blend-mode:difference (see #trailCanvas in        */
+  /*     style.css) reads on light sections (it darkens) and on the    */
+  /*     dark hero (it lightens). No glow, no bright orange, no fire.  */
+  /*     Canvas 2D only, no new dependency. Hover devices only, never  */
+  /*     with reduced motion; the rAF loop sleeps when idle.           */
   /* ------------------------------------------------------------------ */
-  /* 14. Cursor trail + hero/logo glow (Fix 2 & 3, 2026-11-10)           */
-  /*     Canvas 2D only — no Three.js, no new dependency. Runs only    */
-  /*     on hover-capable devices and never with reduced motion.        */
-  /*     The rAF loop sleeps when idle (no particles + no mouse        */
-  /*     movement for 2s) and restarts on the next mousemove.           */
-  /* ------------------------------------------------------------------ */
+
+  /* ---- 14a. Tyre tread trail -------------------------------------- */
   var trail = (function () {
     if (!canHover || reduceMotion) return null;
     var canvas = $('trailCanvas');
@@ -522,9 +530,8 @@
     var ctx = canvas.getContext('2d');
     if (!ctx) return null;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var parts = [], rafId = 0, running = false;
-    var lastSpawn = 0, lastMove = 0;
-    var COLORS = ['#ff7a29', '#f45d12', '#c98a2d', '#ffd9a8'];
+    var marks = [], rafId = 0, running = false, lastMove = 0;
+    var lastX = null, lastY = null, acc = 0;
     function resize() {
       canvas.width = Math.round(window.innerWidth * dpr);
       canvas.height = Math.round(window.innerHeight * dpr);
@@ -532,45 +539,56 @@
     }
     resize();
     on(window, 'resize', resize);
-    /* One glowing water droplet: drifts, shrinks and fades. */
-    function spawn(x, y, big) {
-      if (parts.length > 140) parts.splice(0, parts.length - 140);
-      parts.push({
-        x: x + (Math.random() - 0.5) * 8,
-        y: y + (Math.random() - 0.5) * 8,
-        vx: (Math.random() - 0.5) * 0.7,
-        vy: (Math.random() - 0.5) * 0.7 - 0.25,
-        r: big ? 3 + Math.random() * 5 : 1.6 + Math.random() * 3.2,
-        life: 1,
-        decay: 0.022 + Math.random() * 0.02,
-        c: COLORS[(Math.random() * COLORS.length) | 0]
+    /* One tread stamp: two blocks, one per wheel line, offset
+       perpendicular to the direction of travel. */
+    function stamp(x, y, angle, speed) {
+      if (marks.length > 120) marks.splice(0, marks.length - 120);
+      var len = 9 + Math.min(speed * 0.12, 6); /* faster = longer skid */
+      var px = Math.cos(angle + Math.PI / 2), py = Math.sin(angle + Math.PI / 2);
+      [-7, 7].forEach(function (off) {
+        marks.push({
+          x: x + px * off, y: y + py * off,
+          a: angle + (Math.random() - 0.5) * 0.08,
+          len: len, w: 4.5, life: 1,
+          decay: 0.009 + Math.random() * 0.004 /* ~1.5-2s fade */
+        });
       });
+    }
+    function drawMark(m) {
+      ctx.save();
+      ctx.translate(m.x, m.y);
+      ctx.rotate(m.a);
+      var l = m.len / 2, w = m.w / 2;
+      ctx.beginPath();
+      ctx.moveTo(-l + 2, -w);
+      ctx.lineTo(l - 2, -w);
+      ctx.quadraticCurveTo(l, -w, l, -w + 2);
+      ctx.lineTo(l, w - 2);
+      ctx.quadraticCurveTo(l, w, l - 2, w);
+      ctx.lineTo(-l + 2, w);
+      ctx.quadraticCurveTo(-l, w, -l, w - 2);
+      ctx.lineTo(-l, -w + 2);
+      ctx.quadraticCurveTo(-l, -w, -l + 2, -w);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
     }
     function tick(now) {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.globalCompositeOperation = 'lighter';
-      for (var i = parts.length - 1; i >= 0; i--) {
-        var p = parts[i];
-        p.x += p.vx; p.y += p.vy; p.vy += 0.012; p.life -= p.decay;
-        if (p.life <= 0) { parts.splice(i, 1); continue; }
-        var r = Math.max(p.r * p.life, 0.4);
-        var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 3);
-        g.addColorStop(0, p.c);
-        g.addColorStop(1, 'rgba(255,122,41,0)');
-        ctx.globalAlpha = p.life * 0.85;
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 3, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = '#fff8ef';
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r * 0.45, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.globalCompositeOperation = 'difference';
+      for (var i = marks.length - 1; i >= 0; i--) {
+        var m = marks[i];
+        m.life -= m.decay;
+        if (m.life <= 0) { marks.splice(i, 1); continue; }
+        ctx.globalAlpha = m.life * 0.85;
+        /* Warm mid-grey: with 'difference' it darkens light
+           backgrounds and lightens dark ones — one style, both. */
+        ctx.fillStyle = '#8f8578';
+        drawMark(m);
       }
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
-      if (parts.length === 0 && now - lastMove > 2000) {
+      if (marks.length === 0 && now - lastMove > 2000) {
         running = false; rafId = 0; return; /* sleep until next move */
       }
       rafId = requestAnimationFrame(tick);
@@ -582,58 +600,103 @@
     }
     on(document, 'mousemove', function (e) {
       var now = performance.now();
-      if (now - lastSpawn < 14) return; /* throttle: ~70 spawns/sec max */
-      lastSpawn = now; lastMove = now;
-      spawn(e.clientX, e.clientY, false);
-      spawn(e.clientX, e.clientY, false);
+      lastMove = now;
+      if (lastX === null) { lastX = e.clientX; lastY = e.clientY; return; }
+      var dx = e.clientX - lastX, dy = e.clientY - lastY;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 4) return;
+      acc += dist;
+      var angle = Math.atan2(dy, dx);
+      /* Stamp every ~26px of travel so the tread stays evenly spaced. */
+      while (acc >= 26) {
+        acc -= 26;
+        var t = 1 - acc / dist;
+        stamp(lastX + dx * t, lastY + dy * t, angle, dist);
+      }
+      lastX = e.clientX; lastY = e.clientY;
       wake();
     }, { passive: true });
-    return {
-      burst: function (x, y, n) {
-        for (var i = 0; i < n; i++) spawn(x, y, true);
-        lastMove = performance.now();
-        wake();
-      }
-    };
+    return { wake: wake };
   })();
 
-  /* Hero h1 + header logo glow: colour cycles orange -> gold -> warm
-     white (CSS .glow-on), a soft jelly wobble (GSAP elastic when
-     available, .glow-jelly CSS fallback when not), and water droplets
-     rippling off the cursor while it moves over the text. The hero's
-     outlined "DELHI–NCR" span is untouched — the colour animation
-     only applies to the plain text. */
-  if (canHover && !reduceMotion) {
-    var glowTargets = document.querySelectorAll('.hero h1, .logo');
-    glowTargets.forEach(function (el) {
-      var lastBurst = 0;
-      el.addEventListener('mouseenter', function () {
-        el.classList.add('glow-on');
-        if (window.gsap) {
-          window.gsap.killTweensOf(el);
-          window.gsap.to(el, { scale: 1.025, duration: 0.7, ease: 'elastic.out(1,0.4)' });
-        } else {
-          el.classList.add('glow-jelly');
+  /* ---- 14b. Per-letter glow ---------------------------------------- */
+  /* The old .glow-on lit the whole hero h1 / logo at once. Letters
+     are now split into .ltr spans; on hover the glow sweeps through
+     them one by one (~55ms stagger), each letter cycling orange ->
+     gold -> warm white (dark backgrounds) or orange -> gold -> ink
+     (light backgrounds), with a small jelly lift. The outlined
+     "DELHI–NCR" letters keep their transparent fill + orange
+     stroke and only gain a soft glow, never a fill. Section h2s
+     (except the pin-head h2, which already has its word-by-word
+     entrance) get the same letter-wave hover. The jelly is pure
+     CSS (.ltr.lit transform with an overshoot easing) on purpose:
+     GSAP inline transforms would fight the CSS transition. */
+  (function () {
+    if (!canHover || reduceMotion) return;
+    function splitLetters(el, extraCls) {
+      var nodes = Array.prototype.slice.call(el.childNodes);
+      nodes.forEach(function (node) {
+        if (node.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          node.textContent.split('').forEach(function (ch) {
+            if (ch === ' ' || ch === '\n' || ch === '\t') {
+              frag.appendChild(document.createTextNode(ch));
+            } else {
+              var sp = document.createElement('span');
+              sp.className = 'ltr' + (extraCls ? ' ' + extraCls : '');
+              sp.textContent = ch;
+              frag.appendChild(sp);
+            }
+          });
+          el.replaceChild(frag, node);
+        } else if (node.nodeType === 1) {
+          if (node.classList.contains('w-word')) return; /* pin-head word reveal owns these */
+          var cls = extraCls || '';
+          if (node.classList.contains('out')) cls = (cls ? cls + ' ' : '') + 'out';
+          splitLetters(node, cls);
         }
       });
-      el.addEventListener('mousemove', function (e) {
-        var now = performance.now();
-        if (trail && now - lastBurst > 40) {
-          lastBurst = now;
-          trail.burst(e.clientX, e.clientY, 2);
-        }
+    }
+    function armWave(el, paletteCls) {
+      splitLetters(el, '');
+      var letters = el.querySelectorAll('.ltr');
+      if (!letters.length) return;
+      var timers = [];
+      function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+      el.addEventListener('mouseenter', function () {
+        clearTimers();
+        letters.forEach(function (ltr, i) {
+          timers.push(setTimeout(function () {
+            ltr.classList.add('lit');
+            var c = paletteCls[i % 3];
+            if (c) ltr.classList.add(c);
+          }, i * 55));
+        });
       });
       el.addEventListener('mouseleave', function () {
-        el.classList.remove('glow-on', 'glow-jelly');
-        if (window.gsap) {
-          window.gsap.killTweensOf(el);
-          window.gsap.to(el, { scale: 1, duration: 0.5, ease: 'power3.out' });
-        }
+        clearTimers();
+        letters.forEach(function (ltr, i) {
+          timers.push(setTimeout(function () {
+            ltr.classList.remove('lit', 'c-gold', 'c-white', 'c-ink');
+          }, i * 30));
+        });
       });
+    }
+    var darkWave = ['', 'c-gold', 'c-white']; /* hero, footer logo: on dark */
+    var lightWave = ['', 'c-gold', 'c-ink']; /* logo, h2s: on light */
+    var h1 = document.querySelector('.hero h1');
+    if (h1) armWave(h1, darkWave);
+    var logo = document.querySelector('.logo .l1');
+    if (logo) armWave(logo, lightWave);
+    var footLogo = document.querySelector('.foot-logo .l1');
+    if (footLogo) armWave(footLogo, darkWave);
+    document.querySelectorAll('h2').forEach(function (h2) {
+      if (h2.closest('.pin-head')) return;
+      armWave(h2, h2.closest('.services, .shine, .cafe') ? darkWave : lightWave);
     });
-  }
+  })();
 
-  /* ---- Boot: try the local vendor files first (already in the page);
+/* ---- Boot: try the local vendor files first (already in the page);
      if any failed, try the CDN once, then run with what's available. -- */
   ensureLibraries().then(initMotion);
 })();

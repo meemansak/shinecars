@@ -4,10 +4,10 @@
    single-file site) are preserved below, followed by the ENHANCEMENTS
    section: premium buttons, utility classes and Lenis/GSAP hooks.
    Brand colours: orange #f45d12 / #ff7a29, navy #0b1c24, paper #f7f3ec.
-   Fonts (luxury system): Cormorant Garamond (display serif),
-   Playfair Display (alternate headings), Cinzel + Marcellus
-   (eyebrows / nav / small caps), Jost (body & UI, Manrope fallback),
-   IBM Plex Mono (tiny notes only).
+   Fonts (luxury system): Italiana (thin high-fashion display,
+   headlines + logo), Cormorant Garamond italic (accent words,
+   quotes), Cinzel (eyebrows / nav / small caps), Jost 300/400
+   (body & UI, Manrope fallback), IBM Plex Mono (tiny notes only).
    ============================================================================ */
 
 /* ---------- Contents ----------
@@ -34,37 +34,38 @@
     --txt:#1c2b33; --muted:#5c6d75; --muted-d:#a9bcc4;
     --radius:18px;
     /* Luxury type system (see README > Typography for the why).
-       --font-d  display serif: Cormorant Garamond, Playfair fallback
-       --font-display-alt  alternate headings: Playfair Display
-       --font-eyebrow  small caps: Cinzel, Marcellus fallback
-       --font-b  body/UI: Jost, Manrope fallback
+       --font-d  display: Italiana (single 400 weight), Cormorant
+         Garamond fallback — thin, high-fashion, luxury-car register
+       --font-display-alt  alternate headings: Italiana
+       --font-eyebrow  small caps: Cinzel, Georgia fallback
+       --font-b  body/UI: Jost 300/400, Manrope fallback
        --font-m  tiny notes only: IBM Plex Mono */
-    --font-d:"Cormorant Garamond","Playfair Display",Georgia,"Times New Roman",serif;
-    --font-display-alt:"Playfair Display","Cormorant Garamond",Georgia,serif;
-    --font-eyebrow:"Cinzel","Marcellus",Georgia,serif;
+    --font-d:"Italiana","Cormorant Garamond",Georgia,"Times New Roman",serif;
+    --font-display-alt:"Italiana","Cormorant Garamond",Georgia,serif;
+    --font-eyebrow:"Cinzel",Georgia,serif;
     --font-b:"Jost","Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
     --font-m:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
   }
   html{scroll-behavior:smooth}
   html,body{overflow-x:clip}
-  body{margin:0;font-family:var(--font-b);color:var(--txt);background:var(--paper);-webkit-font-smoothing:antialiased}
+  body{margin:0;font-family:var(--font-b);font-weight:300;letter-spacing:.01em;color:var(--txt);background:var(--paper);-webkit-font-smoothing:antialiased}
   img{max-width:100%;display:block}
   a{color:inherit}
   button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
   .wrap{max-width:1240px;margin:0 auto;padding:0 22px}
   .mono{font-family:var(--font-eyebrow);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
-  h1,h2,h3{font-family:var(--font-d);line-height:1.05;margin:0;letter-spacing:0}
+  h1,h2,h3{font-family:var(--font-d);font-weight:400;line-height:1.1;margin:0;letter-spacing:.05em;text-transform:uppercase}
   p{line-height:1.65}
 
   /* ---------- topbar + nav ---------- */
-  .topbar{background:var(--orange);color:#fff;font-size:.82rem;font-weight:700}
+  .topbar{background:var(--orange);color:#fff;font-size:.82rem;font-weight:600}
   .topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:7px;padding-bottom:7px;flex-wrap:wrap}
   .topbar a{text-decoration:none;display:inline-flex;align-items:center;min-height:32px}
   .topbar .tb-right{display:flex;gap:18px;flex-wrap:wrap}
   header.nav{position:sticky;top:0;z-index:60;background:rgba(255,253,249,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
   .logo{text-decoration:none;line-height:1}
-  .logo .l1{font-family:var(--font-d);font-weight:700;font-size:1.72rem;letter-spacing:.04em;color:var(--ink)}
+  .logo .l1{font-family:var(--font-d);font-weight:400;font-size:1.8rem;letter-spacing:.16em;color:var(--ink)}
   .logo .l1 em{font-style:normal;color:var(--orange)}
   .logo .l2{display:block;font-family:var(--font-eyebrow);font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:3px}
   nav.links{display:flex;gap:4px;align-items:center}
@@ -73,15 +74,15 @@
   nav.links a.kafe-link{color:var(--orange)}
   nav.links a.kafe-link:hover{background:var(--orange);color:#fff}
   .nav-cta{display:flex;gap:10px;align-items:center}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:700;font-size:.92rem;padding:13px 22px;border-radius:12px;border:0;cursor:pointer;min-height:48px;transition:transform .18s ease,background .18s ease,color .18s ease}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:600;font-size:.88rem;letter-spacing:.16em;text-transform:uppercase;padding:13px 24px;border-radius:12px;border:0;cursor:pointer;min-height:48px;transition:transform .18s ease,background .18s ease,color .18s ease}
   .btn:active{transform:scale(.98)}
   .btn-orange{background:var(--orange);color:#fff}
-  .btn-orange:hover{background:var(--ink)}
+  .btn-orange:hover{background:#e0531a}
   .btn-ink{background:var(--ink);color:#fff}
-  .btn-ink:hover{background:var(--orange)}
-  .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.55)}
+  .btn-ink:hover{background:var(--ink2)}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55)}
   .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.08)}
-  .btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+  .btn-outline{background:transparent;color:var(--ink);border:1px solid var(--ink)}
   .btn-outline:hover{background:var(--ink);color:#fff}
   .btn-sm{padding:10px 16px;min-height:44px;font-size:.85rem}
   .burger{display:none;background:var(--ink);color:#fff;border:0;border-radius:10px;width:46px;height:46px;font-size:1.15rem;cursor:pointer}
@@ -101,11 +102,11 @@
   .hero-in{position:relative;padding-top:74px}
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:end}
   .hero .mono{color:var(--orange2)}
-  .hero h1{font-size:clamp(2.7rem,6.4vw,5.1rem);font-weight:700;text-transform:uppercase;margin:16px 0 18px}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.9rem);font-weight:400;text-transform:uppercase;letter-spacing:.07em;line-height:1.12;margin:16px 0 18px}
   .hero h1 .out{color:transparent;-webkit-text-stroke:2px var(--orange2)}
   .hero h1 .org{color:var(--orange2)}
   .hero p.lede{font-size:1.08rem;color:#dbe7ec;max-width:34rem;margin:0 0 26px}
-  .hero-phone{display:flex;align-items:center;gap:12px;font-family:var(--font-d);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.2rem);color:var(--orange2);text-decoration:none;width:fit-content;min-height:48px}
+  .hero-phone{display:flex;align-items:center;gap:12px;font-family:var(--font-d);font-weight:400;letter-spacing:.05em;font-size:clamp(1.5rem,3.4vw,2.2rem);color:var(--orange2);text-decoration:none;width:fit-content;min-height:48px}
   .hero-phone .ic{width:44px;height:44px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:1.05rem;flex:none}
   .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 34px}
   .hero-card{perspective:1100px;padding-bottom:6px}
@@ -118,7 +119,7 @@
   .stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
   .stat{padding:22px 18px 26px;border-left:1px solid rgba(255,255,255,.12)}
   .stat:first-child{border-left:0;padding-left:0}
-  .stat .n{font-family:var(--font-d);font-weight:700;font-size:2rem;color:#fff}
+  .stat .n{font-family:var(--font-d);font-weight:400;font-size:2.2rem;letter-spacing:.04em;color:#fff}
   .stat .n span{color:var(--orange2)}
   .stat .t{font-size:.82rem;color:var(--muted-d);font-weight:600;margin-top:2px}
   @media(max-width:900px){
@@ -136,10 +137,11 @@
   @keyframes mq{to{transform:translateX(-50%)}}
 
   /* ---------- sections ---------- */
-  section{padding:88px 0}
+  section{padding:112px 0}
+  .services,.shine,.cafe,.section--beyond,.reviews,#book,#process{border-top:1px solid rgba(201,138,45,.35)}
   .sec-head{max-width:46rem;margin-bottom:42px}
   .sec-head .mono{color:var(--orange)}
-  .sec-head h2{font-size:clamp(2rem,4.4vw,3.1rem);font-weight:700;margin:12px 0 12px;color:var(--ink)}
+  .sec-head h2{font-size:clamp(2.1rem,4.6vw,3.3rem);font-weight:400;letter-spacing:.05em;margin:12px 0 12px;color:var(--ink)}
   .sec-head p{color:var(--muted);margin:0;font-size:1.02rem}
   /* Content is never hidden waiting on JS: sections render in full on load.
      Motion lives in the hero parallax, pinned process, tilt cards and slider. */
@@ -150,10 +152,10 @@
   .collage{position:relative;perspective:1000px}
   .collage .main-img{border-radius:20px;height:480px;width:100%;object-fit:cover;box-shadow:0 26px 55px rgba(11,28,36,.2)}
   .collage .float-img{position:absolute;right:-8px;bottom:-30px;width:52%;height:250px;object-fit:cover;border-radius:16px;border:6px solid var(--paper);box-shadow:0 20px 44px rgba(11,28,36,.25)}
-  .collage .badge{position:absolute;left:16px;top:16px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;font-family:var(--font-d);font-weight:700}
+  .collage .badge{position:absolute;left:16px;top:16px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;font-family:var(--font-d);font-weight:400;letter-spacing:.05em}
   .collage .badge small{display:block;font-family:var(--font-eyebrow);font-weight:600;font-size:.6rem;letter-spacing:.22em;color:var(--orange2);text-transform:uppercase}
   .checks{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin:26px 0 30px}
-  .check{display:flex;gap:10px;align-items:flex-start;font-weight:700;color:var(--ink);font-size:.95rem}
+  .check{display:flex;gap:10px;align-items:flex-start;font-weight:600;color:var(--ink);font-size:.95rem}
   .check .tick{flex:none;width:24px;height:24px;border-radius:7px;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:.75rem;margin-top:1px}
   @media(max-width:900px){.about-grid{grid-template-columns:1fr}.collage .main-img{height:340px}.collage{margin-bottom:34px}}
 
@@ -164,14 +166,14 @@
   .svc-list{display:flex;flex-direction:column;gap:18px}
   .svc{display:grid;grid-template-columns:110px 1fr 340px;gap:26px;align-items:center;background:var(--ink2);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:22px;transition:border-color .2s ease,background .2s ease}
   .svc:hover{border-color:rgba(255,122,41,.55);background:var(--ink3)}
-  .svc .num{font-family:var(--font-d);font-weight:700;font-size:2.6rem;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.4)}
-  .svc h3{font-size:1.45rem;font-weight:700;margin-bottom:7px}
+  .svc .num{font-family:var(--font-d);font-weight:400;font-size:2.8rem;letter-spacing:.04em;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.4)}
+  .svc h3{font-size:1.5rem;font-weight:400;letter-spacing:.06em;margin-bottom:7px}
   .svc p{margin:0;color:var(--muted-d);font-size:.95rem;max-width:34rem}
   .svc .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
   .svc .tags span{font-family:var(--font-eyebrow);font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,255,255,.22);padding:6px 10px;border-radius:999px;color:#dbe7ec}
   .svc .svc-img{border-radius:14px;overflow:hidden;perspective:800px}
   .svc .svc-img img{width:100%;height:190px;object-fit:cover}
-  .svc .book-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:var(--orange2);font-weight:700;text-decoration:none;min-height:36px}
+  .svc .book-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:var(--orange2);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.82rem;text-decoration:none;min-height:36px}
   @media(max-width:900px){.svc{grid-template-columns:1fr}.svc .num{font-size:1.8rem}.svc .svc-img img{height:210px}}
 
   /* process — pinned horizontal */
@@ -186,11 +188,11 @@
   .pin-wrap{height:190vh;position:relative}
   .pin-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
   .pin-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:30px;flex-wrap:wrap}
-  .pin-head h2{font-size:clamp(2rem,4.4vw,3rem);font-weight:700;color:var(--ink)}
+  .pin-head h2{font-size:clamp(2.1rem,4.6vw,3.2rem);font-weight:400;letter-spacing:.05em;color:var(--ink)}
   .pin-track{display:flex;gap:20px;will-change:transform;padding-right:6vw}
   .step{flex:0 0 min(430px,84vw);background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px;min-height:380px;display:flex;flex-direction:column}
   .step .s-num{font-family:var(--font-eyebrow);font-weight:600;color:var(--orange);letter-spacing:.2em;font-size:.75rem}
-  .step h3{font-size:1.6rem;font-weight:700;color:var(--ink);margin:12px 0 10px}
+  .step h3{font-size:1.65rem;font-weight:400;letter-spacing:.06em;color:var(--ink);margin:12px 0 10px}
   .step p{color:var(--muted);margin:0;font-size:.97rem}
   .step img{margin-top:auto;padding-top:20px;width:100%;height:150px;object-fit:cover;border-radius:12px}
   .step.dark{background:var(--ink);border-color:var(--ink)}
@@ -224,25 +226,25 @@
   .cafe{background:#2a1a10;color:#fdf3e7}
   .cafe-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
   .cafe .mono{color:#ffb37e}
-  .cafe h2{font-size:clamp(2.1rem,4.6vw,3.3rem);font-weight:700;margin:14px 0 14px}
-  .cafe h2 em{font-style:normal;color:#ff8b3d}
+  .cafe h2{font-size:clamp(2.2rem,4.8vw,3.5rem);font-weight:400;letter-spacing:.05em;margin:14px 0 14px}
+  .cafe h2 em{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0;color:#ff8b3d}
   .cafe p{color:#ecd9c6;margin:0 0 16px}
   .cafe-imgs{position:relative;perspective:1000px}
   .cafe-imgs .c1{width:100%;height:430px;object-fit:cover;border-radius:20px;box-shadow:0 28px 60px rgba(0,0,0,.45)}
   .cafe-imgs .c2{position:absolute;right:-6px;bottom:-26px;width:46%;height:190px;object-fit:cover;border-radius:14px;border:6px solid #2a1a10;box-shadow:0 18px 40px rgba(0,0,0,.4)}
   .cafe-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
   .cafe-facts div{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:14px 16px}
-  .cafe-facts b{display:block;font-family:var(--font-d);font-weight:700;font-size:1.08rem}
+  .cafe-facts b{display:block;font-family:var(--font-d);font-weight:400;letter-spacing:.04em;font-size:1.12rem}
   .cafe-facts span{font-size:.82rem;color:#d9c3ab}
   .btn-cafe{background:#ff8b3d;color:#241304}
   .btn-cafe:hover{background:#fff}
-  .btn-cafe-ghost{background:transparent;color:#fdf3e7;border:1.5px solid rgba(253,243,231,.5)}
+  .btn-cafe-ghost{background:transparent;color:#fdf3e7;border:1px solid rgba(253,243,231,.5)}
   .btn-cafe-ghost:hover{border-color:#fff}
   @media(max-width:900px){.cafe-grid{grid-template-columns:1fr}.cafe-imgs{margin-bottom:30px}.cafe-imgs .c1{height:320px}}
 
   /* beyond + reviews */
   .beyond{display:flex;gap:10px;flex-wrap:wrap}
-  .beyond span{border:1.5px solid var(--ink);border-radius:999px;padding:11px 18px;font-weight:700;font-size:.9rem;color:var(--ink);background:var(--paper2)}
+  .beyond span{border:1px solid var(--ink);border-radius:999px;padding:11px 18px;font-weight:600;font-size:.9rem;color:var(--ink);background:var(--paper2)}
   .reviews{background:var(--paper2)}
   .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .rev{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:14px}
@@ -255,7 +257,7 @@
   .book-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
   .book-card{background:var(--paper2);border:1px solid var(--line);border-radius:20px;padding:30px}
   .book-card.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .book-card h3{font-size:1.55rem;font-weight:700;margin-bottom:8px}
+  .book-card h3{font-size:1.6rem;font-weight:400;letter-spacing:.06em;margin-bottom:8px}
   .book-card p{color:var(--muted);margin:0 0 20px;font-size:.95rem}
   .book-card.dark p{color:var(--muted-d)}
   /* ---------- booking form ----------
@@ -267,8 +269,8 @@
      a fixed line-height — so paired fields share a baseline at every
      width. .frow is 2 equal columns on desktop, 1 column under 900px. */
   .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
-  label.fl{display:flex;flex-direction:column;gap:8px;font-size:.78rem;font-weight:700;line-height:1.35;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
-  label.fl input,label.fl select,label.fl textarea{display:block;width:100%;height:52px;min-height:52px;box-sizing:border-box;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;font-family:var(--font-b);font-size:.95rem;font-weight:600;color:var(--ink);background:#fff;text-transform:none;letter-spacing:0}
+  label.fl{display:flex;flex-direction:column;gap:8px;font-size:.78rem;font-weight:600;line-height:1.35;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
+  label.fl input,label.fl select,label.fl textarea{display:block;width:100%;height:52px;min-height:52px;box-sizing:border-box;padding:12px 13px;border:1px solid var(--line);border-radius:11px;font-family:var(--font-b);font-size:.95rem;font-weight:400;color:var(--ink);background:#fff;text-transform:none;letter-spacing:0}
   label.fl textarea{height:auto;min-height:104px;resize:vertical}
   /* One custom chevron for every select, so selects measure exactly
      like text/date inputs instead of using each browser's own arrow. */
@@ -300,18 +302,18 @@
   /* footer */
   footer.site{background:var(--ink);color:#dbe7ec;padding:64px 0 0}
   .foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;padding-bottom:44px}
-  footer.site h4{font-family:var(--font-display-alt);font-weight:700;color:#fff;font-size:1.1rem;margin:0 0 16px}
+  footer.site h4{font-family:var(--font-display-alt);font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:#fff;font-size:1.05rem;margin:0 0 16px}
   footer.site ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
   footer.site ul a{text-decoration:none;font-size:.93rem;display:inline-flex;min-height:32px;align-items:center;color:#c3d3da}
   footer.site ul a:hover{color:var(--orange2)}
   footer.site p{color:var(--muted-d);font-size:.93rem;max-width:22rem}
-  .foot-logo .l1{font-family:var(--font-d);font-weight:700;font-size:1.9rem;letter-spacing:.04em;color:#fff}
+  .foot-logo .l1{font-family:var(--font-d);font-weight:400;font-size:1.9rem;letter-spacing:.14em;color:#fff}
   .foot-logo .l1 em{font-style:normal;color:var(--orange2)}
   .socials{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-  .socials a{border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 14px;text-decoration:none;font-weight:700;font-size:.82rem;min-height:40px;display:inline-flex;align-items:center}
+  .socials a{border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:10px 14px;text-decoration:none;font-weight:600;letter-spacing:.06em;font-size:.82rem;min-height:40px;display:inline-flex;align-items:center}
   .socials a:hover{background:var(--orange);border-color:var(--orange);color:#fff}
   .copy{border-top:1px solid rgba(255,255,255,.12);padding:18px 0 22px;font-size:.84rem;color:var(--muted-d);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  .wa-float{position:fixed;right:18px;bottom:18px;z-index:70;background:#1faa55;color:#fff;text-decoration:none;font-weight:700;font-size:.9rem;padding:14px 20px;border-radius:999px;box-shadow:0 14px 34px rgba(10,40,20,.35);display:inline-flex;gap:8px;align-items:center;min-height:52px}
+  .wa-float{position:fixed;right:18px;bottom:18px;z-index:70;background:#1faa55;color:#fff;text-decoration:none;font-weight:600;letter-spacing:.08em;font-size:.9rem;padding:14px 20px;border-radius:999px;box-shadow:0 14px 34px rgba(10,40,20,.35);display:inline-flex;gap:8px;align-items:center;min-height:52px}
   .wa-float:hover{background:#178a44}
   @media(max-width:640px){
     .topbar .tb-right span{display:none}
@@ -353,8 +355,8 @@ html.lenis, html.lenis body { height: auto; }
 .text-muted-wide { color: var(--muted); max-width: 44rem; }
 .link-orange { color: var(--orange); font-weight: 800; }
 .link-orange2 { color: var(--orange2); font-weight: 800; }
-.title-about { font-size: clamp(2rem, 4.2vw, 3rem); font-weight: 800; color: var(--ink); margin: 12px 0 14px; }
-.title-beyond { font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 800; color: var(--ink); margin: 12px 0 12px; }
+.title-about { font-size: clamp(2.1rem, 4.4vw, 3.2rem); font-weight: 400; letter-spacing: .05em; color: var(--ink); margin: 12px 0 14px; }
+.title-beyond { font-size: clamp(1.8rem, 3.8vw, 2.6rem); font-weight: 400; letter-spacing: .05em; color: var(--ink); margin: 12px 0 12px; }
 .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
 .btn--full { width: 100%; }
 .btn--spaced { margin-top: 26px; }
@@ -363,7 +365,7 @@ html.lenis, html.lenis body { height: auto; }
 .sec-head--center { margin-left: auto; margin-right: auto; text-align: center; }
 .cafe-note { font-size: .82rem; color: #cbb091; margin-top: 14px; }
 .form-note { font-size: .8rem; margin: 12px 0 0; text-align: center; }
-.section--beyond { padding: 70px 0; }
+.section--beyond { padding: 96px 0; }
 .section--pt20 { padding-top: 20px; }
 .section--pt30 { padding-top: 30px; }
 
@@ -374,7 +376,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- Cafe visitor quote + draft menu ---------- */
 .cafe-quote { margin: 28px 0; padding: 20px 22px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-left: 3px solid var(--gold, #c98a2d); border-radius: 14px; }
 .cafe-quote .mono { color: #ffb37e; }
-.cafe-quote p { font-family: var(--font-d); font-size: 1.25rem; line-height: 1.5; color: #fdf3e7; margin: 10px 0 12px; }
+.cafe-quote p { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.35rem; line-height: 1.5; color: #fdf3e7; margin: 10px 0 12px; }
 .cafe-quote footer { font-size: .85rem; color: #d9c3ab; }
 .cafe-quote footer a { color: #ffb37e; text-decoration: none; font-weight: 700; }
 .cafe-quote footer a:hover { text-decoration: underline; }
@@ -385,12 +387,13 @@ html.lenis, html.lenis body { height: auto; }
 .cafe-menu li { padding: 8px 14px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: .9rem; font-weight: 600; color: #fdf3e7; }
 
 /* ---------- Luxury headings ----------
-   Playfair Display for section + service + step titles (Cormorant
-   stays on the hero, About and cafe headlines); gold eyebrows on
-   light sections sell the luxury feel without touching the brand
-   orange, which stays on CTAs and the dark sections. */
-.sec-head h2, .pin-head h2 { font-family: var(--font-display-alt); font-weight: 700; letter-spacing: .01em; }
-.svc h3, .step h3, .book-card h3 { font-family: var(--font-display-alt); font-weight: 700; }
+   Italiana for all display headings (hero, section, service, step,
+   cafe); Cormorant Garamond italic only for accent words and the
+   cafe quote; gold eyebrows on light sections sell the luxury feel
+   without touching the brand orange, which stays on CTAs and the
+   dark sections. */
+.sec-head h2, .pin-head h2 { font-family: var(--font-display-alt); font-weight: 400; letter-spacing: .05em; }
+.svc h3, .step h3, .book-card h3 { font-family: var(--font-display-alt); font-weight: 400; }
 .sec-head .mono { color: var(--gold); }
 /* IBM Plex Mono survives only here: the two tiny notes. */
 .form-note, .shine-note { font-family: var(--font-m); }
@@ -401,7 +404,7 @@ html.lenis, html.lenis body { height: auto; }
    assets/js/main.js with GSAP — only on hover-capable devices,
    and never when reduced motion is preferred. */
 .btn { position: relative; overflow: hidden; isolation: isolate; will-change: transform;
-  font-family: var(--font-b); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  font-family: var(--font-b); font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
 .btn::after {
   content: "";
   position: absolute;
@@ -434,44 +437,54 @@ html.lenis, html.lenis body { height: auto; }
   .btn { will-change: auto; }
 }
 
-/* ---------- Cursor trail + hero/logo glow (Fix 2 & 3, 2026-11-10) ----
-   Canvas 2D only — no Three.js, no new dependency. The canvas is a
-   fixed overlay with pointer-events:none, so it can never block a
-   click; the trail is drawn by main.js section 14 and only runs on
-   hover-capable devices. z-index 90 sits above the sticky nav (60)
-   and the WhatsApp float (70) but there is no modal on this page. */
-#trailCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; }
+/* ---------- Cursor trail: fading tyre tread marks -------------------
+   Rework (2026-11-10): the old glowing water droplets read as FIRE,
+   so they are gone. The trail is now two parallel lines of small
+   dark tread blocks, each rotated to the cursor's direction of
+   travel — like a wheel rolling past and leaving skid marks on the
+   road. The canvas uses mix-blend-mode:difference with warm-grey
+   tread, so the same marks read on light sections (they darken)
+   and on the dark hero (they lighten). No glow, no bright orange,
+   no fire. Canvas 2D only, drawn by main.js section 14; fixed
+   overlay, pointer-events:none, so it can never block a click.
+   z-index 90 sits above the sticky nav (60) and the WhatsApp
+   float (70); there is no modal on this page. */
+#trailCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; mix-blend-mode: difference; }
 @media (hover: none) { #trailCanvas { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   #trailCanvas { display: none; }
-  .hero h1.glow-on, .logo.glow-on .l1 { animation: none; }
+  .ltr { transition: none !important; animation: none !important; }
 }
 
-/* Hero h1 + header logo: on hover the text glows and its colour
-   cycles orange -> gold -> warm white; the jelly wobble is a soft
-   elastic scale — GSAP when available (main.js), .glow-jelly CSS
-   fallback when not. The hero's outlined "DELHI–NCR" span keeps
-   its own transparent fill + stroke: the colour animation only
-   touches the plain text, never .out. */
-.hero h1, .logo { will-change: transform; }
-.hero h1.glow-on { animation: glowCycle 2.4s linear infinite; }
-.hero h1.glow-on { text-shadow: 0 0 18px rgba(255, 122, 41, .75), 0 0 46px rgba(201, 138, 45, .5); }
-.logo.glow-on { text-shadow: 0 0 16px rgba(255, 122, 41, .45); }
-/* Logo sits on a light nav bar, so its cycle ends on ink, not white. */
-.logo.glow-on .l1 { animation: glowCycleLogo 2.4s linear infinite; }
-.hero h1.glow-jelly, .logo.glow-jelly { transform: scale(1.02); transition: transform .45s cubic-bezier(.34, 1.56, .64, 1); }
-@keyframes glowCycle {
-  0% { color: #ff7a29; }
-  33% { color: #c98a2d; }
-  66% { color: #fff; }
-  100% { color: #ff7a29; }
-}
-@keyframes glowCycleLogo {
-  0% { color: #ff7a29; }
-  33% { color: #c98a2d; }
-  66% { color: #0b1c24; }
-  100% { color: #ff7a29; }
-}
+/* ---------- Per-letter glow (replaces the old whole-text glow) ------
+   The old .glow-on lit the entire hero h1 / logo at once. Letters
+   are now split into .ltr spans by main.js section 14, and the glow
+   sweeps through them one by one (JS staggers each letter's .lit
+   class by ~55ms, colour cycling orange -> gold -> warm white on
+   dark backgrounds, orange -> gold -> ink on light ones). The
+   outlined "DELHI–NCR" letters (.out) keep their transparent fill
+   + orange stroke and only gain a soft glow, never a fill. The
+   jelly wobble is a small translate + scaleY on the lit letter,
+   with a GSAP elastic pass when available. */
+.ltr { display: inline-block; will-change: transform, color, text-shadow;
+  transition: color .5s ease, text-shadow .5s ease, transform .5s cubic-bezier(.34, 1.56, .64, 1); }
+.ltr.lit { color: #ff7a29;
+  text-shadow: 0 0 16px rgba(255, 122, 41, .55), 0 0 42px rgba(201, 138, 45, .35);
+  transform: translateY(-2px) scaleY(1.07); }
+.ltr.lit.c-gold { color: #c98a2d; }
+.ltr.lit.c-white { color: #fff; }
+.ltr.lit.c-ink { color: #0b1c24; }
+.hero h1 .out.ltr { color: transparent; -webkit-text-stroke: 2px var(--orange2); }
+.hero h1 .out.ltr.lit { color: transparent;
+  text-shadow: 0 0 18px rgba(255, 122, 41, .6); }
+.logo .l1 .ltr.lit.c-white { color: #0b1c24; }
+
+/* ---------- Refined markers (replace the old emoji) ------------------
+   Small gold diamonds mark facts, chips and info rows instead of
+   pictographic emoji — the emoji read "local", the diamonds read
+   like a luxury badge. */
+.mk { color: var(--gold); font-style: normal; font-size: .8em; margin-right: 6px; }
+.beyond .mk { color: var(--gold); }
 
 /* ---------- Word-by-word headline reveal + scroll cue ----------
    Idea borrowed from the Wedditors reference (.note-word): words
@@ -480,7 +493,7 @@ html.lenis, html.lenis body { height: auto; }
    reference's green/cream or its copy). Words are never hidden by
    CSS — GSAP animates *from* the dim state only when it runs. */
 .pin-head h2 .w-word { display: inline-block; will-change: transform, opacity; }
-.pin-head h2 em { font-style: italic; color: var(--orange); }
+.pin-head h2 em { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--orange); }
 .scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 auto; padding: 26px 0 6px; font-family: var(--font-eyebrow); font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 600; color: var(--orange); text-align: center; }
 .scroll-cue i { font-style: normal; font-size: 1.25rem; line-height: 1; animation: cueDrop 1.6s ease-in-out infinite; }
 @keyframes cueDrop {

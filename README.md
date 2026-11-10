@@ -64,10 +64,10 @@ with serif / sans fallbacks in the `--font-*` variables in
 
 | Role | Font | Why |
 |---|---|---|
-| Big headlines, hero, About & cafe titles | **Cormorant Garamond** 500/600/700 (+ italic) | High-contrast elegant serif in the Rolls-Royce / Bentley register; light, airy, expensive at large sizes |
-| Section, service & step titles | **Playfair Display** 600/700 (Cormorant as fallback) | A second display serif so titles don't all look identical; used for `.sec-head h2`, `.svc h3`, `.step h3` |
-| Eyebrow labels, nav, small caps, marquee | **Cinzel** 500/600/700, **Marcellus** as fallback | Engraved Roman-cap feel, uppercase with 0.18–0.28em letter-spacing |
-| Body, buttons, UI, forms | **Jost** 300/400/500/600/700 | Refined geometric sans; light weights + wide tracking read as luxury. **Manrope** is kept only as the fallback |
+| Big headlines, hero, logo, all section/service/step titles | **Italiana** (single 400 weight) | Thin, high-fashion, luxury-car-register display face — uppercase with generous letter-spacing, light and airy at large sizes |
+| Accent words & quotes only | **Cormorant Garamond** italic 500/600 | Soft high-contrast serif italic for the accent phrase ("step by step", cafe headline) and the visitor quote — never a headline face any more |
+| Eyebrow labels, nav, small caps, marquee | **Cinzel** 500/600/700 | Engraved Roman-cap feel, uppercase with 0.18–0.28em letter-spacing |
+| Body, buttons, UI, forms | **Jost** 300/400/500/600 | Refined geometric sans; light weights + wide tracking read as luxury. **Manrope** is kept only as the fallback |
 | Tiny notes only | **IBM Plex Mono** 500/600 | Used just for `.form-note` / `.shine-note` |
 
 The luxury feel also comes from the gold accent (`--gold: #c98a2d`,

@@ -4,10 +4,9 @@
    single-file site) are preserved below, followed by the ENHANCEMENTS
    section: premium buttons, utility classes and Lenis/GSAP hooks.
    Brand colours: orange #f45d12 / #ff7a29, navy #0b1c24, paper #f7f3ec.
-   Fonts (luxury system): Italiana (thin high-fashion display,
-   headlines + logo), Cormorant Garamond italic (accent words,
-   quotes), Cinzel (eyebrows / nav / small caps), Jost 300/400
-   (body & UI, Manrope fallback), IBM Plex Mono (tiny notes only).
+   Fonts (luxury system): Bodoni Moda (Didone high-fashion display,
+   headlines + logo, italics for accent words and quotes),
+   Manrope (eyebrows / nav / small caps, body & UI, tiny notes).
    ============================================================================ */
 
 /* ---------- Contents ----------
@@ -34,21 +33,21 @@
     --txt:#1c2b33; --muted:#5c6d75; --muted-d:#a9bcc4;
     --radius:18px;
     /* Luxury type system (see README > Typography for the why).
-       --font-d  display: Italiana (single 400 weight), Cormorant
-         Garamond fallback — thin, high-fashion, luxury-car register
-       --font-display-alt  alternate headings: Italiana
-       --font-eyebrow  small caps: Cinzel, Georgia fallback
-       --font-b  body/UI: Jost 300/400, Manrope fallback
-       --font-m  tiny notes only: IBM Plex Mono */
-    --font-d:"Italiana","Cormorant Garamond",Georgia,"Times New Roman",serif;
-    --font-display-alt:"Italiana","Cormorant Garamond",Georgia,serif;
-    --font-eyebrow:"Cinzel",Georgia,serif;
-    --font-b:"Jost","Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-    --font-m:"IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
+       --font-d  display: Bodoni Moda (Didone, high-fashion) —
+         Vogue / luxury-house register, optical sizes on
+       --font-display-alt  alternate headings: Bodoni Moda
+       --font-eyebrow  small caps: Manrope, letterspaced
+       --font-b  body/UI: Manrope 300–700
+       --font-m  tiny notes only: Manrope */
+    --font-d:"Bodoni Moda",Didot,Georgia,"Times New Roman",serif;
+    --font-display-alt:"Bodoni Moda",Didot,Georgia,serif;
+    --font-eyebrow:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --font-b:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --font-m:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
   }
   html{scroll-behavior:smooth}
   html,body{overflow-x:clip}
-  body{margin:0;font-family:var(--font-b);font-weight:300;letter-spacing:.01em;color:var(--txt);background:var(--paper);-webkit-font-smoothing:antialiased}
+  body{margin:0;font-family:var(--font-b);font-weight:400;letter-spacing:.01em;color:var(--txt);background:var(--paper);-webkit-font-smoothing:antialiased}
   img{max-width:100%;display:block}
   a{color:inherit}
   button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
@@ -236,7 +235,7 @@
   .cafe-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center}
   .cafe .mono{color:#ffb37e}
   .cafe h2{font-size:clamp(2.2rem,4.8vw,3.5rem);font-weight:400;letter-spacing:.05em;margin:14px 0 14px}
-  .cafe h2 em{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0;color:#ff8b3d}
+  .cafe h2 em{font-family:"Bodoni Moda",Didot,Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0;color:#ff8b3d}
   .cafe p{color:#ecd9c6;margin:0 0 16px}
   .cafe-imgs{position:relative;perspective:1000px}
   .cafe-imgs .c1{width:100%;height:430px;object-fit:cover;border-radius:20px;box-shadow:0 28px 60px rgba(0,0,0,.45)}
@@ -398,7 +397,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- Cafe visitor quote + draft menu ---------- */
 .cafe-quote { margin: 28px 0; padding: 20px 22px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.13); border-left: 3px solid var(--gold, #c98a2d); border-radius: 14px; }
 .cafe-quote .mono { color: #ffb37e; }
-.cafe-quote p { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.35rem; line-height: 1.5; color: #fdf3e7; margin: 10px 0 12px; }
+.cafe-quote p { font-family: "Bodoni Moda", Didot, Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.35rem; line-height: 1.5; color: #fdf3e7; margin: 10px 0 12px; }
 .cafe-quote footer { font-size: .85rem; color: #d9c3ab; }
 .cafe-quote footer a { color: #ffb37e; text-decoration: none; font-weight: 700; }
 .cafe-quote footer a:hover { text-decoration: underline; }
@@ -409,15 +408,15 @@ html.lenis, html.lenis body { height: auto; }
 .cafe-menu li { padding: 8px 14px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: .9rem; font-weight: 600; color: #fdf3e7; }
 
 /* ---------- Luxury headings ----------
-   Italiana for all display headings (hero, section, service, step,
-   cafe); Cormorant Garamond italic only for accent words and the
+   Bodoni Moda for all display headings (hero, section, service, step,
+   cafe); Bodoni Moda italic only for accent words and the
    cafe quote; gold eyebrows on light sections sell the luxury feel
    without touching the brand orange, which stays on CTAs and the
    dark sections. */
 .sec-head h2, .pin-head h2 { font-family: var(--font-display-alt); font-weight: 400; letter-spacing: .05em; }
 .svc h3, .step h3, .book-card h3 { font-family: var(--font-display-alt); font-weight: 400; }
 .sec-head .mono { color: var(--gold); }
-/* IBM Plex Mono survives only here: the two tiny notes. */
+/* Manrope survives only here: the two tiny notes. */
 .form-note, .shine-note { font-family: var(--font-m); }
 
 /* ---------- Premium buttons ---------- */
@@ -513,11 +512,11 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- Word-by-word headline reveal + scroll cue ----------
    Idea borrowed from the Wedditors reference (.note-word): words
    lift in one by one from low opacity; the accent phrase is italic
-   Cormorant in brand orange (ShineCars' own fonts/colours, not the
+   Bodoni Moda in brand orange (ShineCars' own fonts/colours, not the
    reference's green/cream or its copy). Words are never hidden by
    CSS — GSAP animates *from* the dim state only when it runs. */
 .pin-head h2 .w-word { display: inline-block; will-change: transform, opacity; }
-.pin-head h2 em { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--orange); }
+.pin-head h2 em { font-family: "Bodoni Moda", Didot, Georgia, serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--orange); }
 .scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 auto; padding: 26px 0 6px; font-family: var(--font-eyebrow); font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 600; color: var(--orange); text-align: center; }
 .scroll-cue i { font-style: normal; font-size: 1.25rem; line-height: 1; animation: cueDrop 1.6s ease-in-out infinite; }
 @keyframes cueDrop {

@@ -64,11 +64,11 @@ with serif / sans fallbacks in the `--font-*` variables in
 
 | Role | Font | Why |
 |---|---|---|
-| Big headlines, hero, logo, all section/service/step titles | **Italiana** (single 400 weight) | Thin, high-fashion, luxury-car-register display face — uppercase with generous letter-spacing, light and airy at large sizes |
-| Accent words & quotes only | **Cormorant Garamond** italic 500/600 | Soft high-contrast serif italic for the accent phrase ("step by step", cafe headline) and the visitor quote — never a headline face any more |
-| Eyebrow labels, nav, small caps, marquee | **Cinzel** 500/600/700 | Engraved Roman-cap feel, uppercase with 0.18–0.28em letter-spacing |
-| Body, buttons, UI, forms | **Jost** 300/400/500/600 | Refined geometric sans; light weights + wide tracking read as luxury. **Manrope** is kept only as the fallback |
-| Tiny notes only | **IBM Plex Mono** 500/600 | Used just for `.form-note` / `.shine-note` |
+| Big headlines, hero, logo, all section/service/step titles | **Bodoni Moda** 400/500/600 (opsz 6–96) | Didone high-fashion display face — Vogue / luxury-house register, uppercase with generous letter-spacing, sharp thick-thin contrast at large sizes |
+| Accent words & quotes only | **Bodoni Moda** italic 400/500 | High-contrast serif italic for the accent phrase ("step by step", cafe headline) and the visitor quote — never a headline face any more |
+| Eyebrow labels, nav, small caps, marquee | **Manrope** 500/600/700 | Clean geometric sans, uppercase with 0.18–0.28em letter-spacing |
+| Body, buttons, UI, forms | **Manrope** 300/400/500/600 | Clean, modern, premium-feeling sans; wide tracking reads as luxury |
+| Tiny notes only | **Manrope** | Used just for `.form-note` / `.shine-note` |
 
 The luxury feel also comes from the gold accent (`--gold: #c98a2d`,
 used for eyebrows on light sections), generous letter-spacing and
